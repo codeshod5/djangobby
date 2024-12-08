@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .review-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            .review-box {
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+                margin: 15px;
+                padding: 20px;
+                width: 300px; /* Adjust width as needed */
+                text-align: left;
+                background-color: #f9f9f9;
+            }
+            .review-box img {
+                width: 70%; /* Make the image responsive */
+                border-radius: 8px;
+            }
+            .review-deatails {
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+
+<h1>Reviews</h1>
+<form method="GET" action="{% url 'get_routes' %}">
+    <input type="text" name="search" placeholder="Search by Route, Bus, or Number Plate" value="{{ search_query }}">
+    <button type="submit">Search</button>
+</form>
+<div class="review-container">
+
+{% for review in busform %}
+<div class="review-box">
+    <div class="review-deatails">
+    <p>route number_plate: {{ review.route_no }}</p>
+    <p>bus number: {{ review.bus_no }}</p>  
+    <p>number plate: {{ review.number_plate }}</p>
+    <p><strong>Live Location:</strong>
+        
+                <a href="{{ review.live_location_link }}" target="_blank">View on Google Maps</a>
+            </p>
+  
+</div>
+</div>
+
+
+{% empty %}
+    <p>No reviews available.</p>
+{% endfor %}
+</div>
+    </body>
+    </html>
+
+
+
+
+
