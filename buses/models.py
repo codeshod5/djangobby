@@ -7,4 +7,7 @@ class Busform(models.Model):
     number_plate= models.CharField(max_length=5)
     live_location_link = models.URLField()
 
+class Addroutes(models.Model):
+    routenum = models.IntegerField()
+    areas = models.TextField()
 

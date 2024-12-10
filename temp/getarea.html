@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    width: 80%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.route-details h3 {
+    margin: 0;
+    color: #333;
+}
+
+.route-details p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.price {
+    color: #28a745;
+    font-weight: bold;
+}
+
+</style>
+<body>
+  <div class="container">
+      {% for i in getting %}
+      <div class="card">
+          <div class="content">
+              <div class="route-details">
+                  <h3>Route Number: {{ i.routenum }}</h3>
+                  <p>Areas: {{ i.areas }}</p>
+              </div>
+              <div class="price">
+                  <p>$9.99 / route</p> <!-- Placeholder price -->
+              </div>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
+</body>
+</html>
+
+<!-- 
+{% for i in getting %}
+  {{i.routenum}}
+  {{i.areas}}
+{% endfor %} -->

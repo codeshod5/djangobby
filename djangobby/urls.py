@@ -23,5 +23,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
   
     path('route/',fillroute,name='fillroute'),
-    path('get_routes/',get_routes,name='get_routes')
+    path('get_routes/',get_routes,name='get_routes'),
+    # path('update/<int:update_id>/',updatee,name='updatee')
+    path('remove/<int:busid>/',remove,name='remove'),
+    path('update/<int:busid>/',updatee,name='updatee'),
+    path('adds/',addroutes,name='addroutes'),
+    path('get_areas/',get_areas,name='get_areas')
+
 ]
