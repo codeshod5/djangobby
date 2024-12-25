@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Areas</title>
+    <script>
+        // JavaScript code will go here
+    </script>
+</head>
+<body>
+    <h1>Areas</h1>
+    <div id="areas">Loading...</div> <!-- Container for areas -->
+    <script>
+ fetch('http://127.0.0.1:8000/api/deatails')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    console.log('Data received:', data);
+  })
+  .catch(error => {
+    console.error('There was a problem with the fetch operation:', error);
+  });
+
+    </script>
+    
+</body>
+</html>

@@ -2,19 +2,76 @@
 <html lang="en">
 <head>
     <title>Update Bus Route</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #689af1;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #478ae8;
+        }
+    </style>
 </head>
 <body>
-    <h1>Update Bus Route</h1>
     <form method="post">
+        <h1>Update Bus Route</h1>
         {% csrf_token %}
         <label for="route_no">Route Number:</label>
-        <input type="text" id="route_no" name="route_no" value="{{ data.route_no }}"><br><br>
+        <input type="text" id="route_no" name="route_no" value="{{ data.route_no }}">
 
         <label for="bus_no">Bus Number:</label>
-        <input type="text" id="bus_no" name="bus_no" value="{{ data.bus_no }}"><br><br>
+        <input type="text" id="bus_no" name="bus_no" value="{{ data.bus_no }}">
 
         <label for="live_location_link">Live Location Link:</label>
-        <input type="text" id="live_location_link" name="live_location_link" value="{{ data.live_location_link }}"><br><br>
+        <input type="text" id="live_location_link" name="live_location_link" value="{{ data.live_location_link }}">
 
         <button type="submit">Update</button>
     </form>

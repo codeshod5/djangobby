@@ -6,7 +6,11 @@ from django.shortcuts import redirect
 from django.db.models import Q
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
-
+from django.db.models import Count
+from io import BytesIO
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import requests
 
 
 def fillroute(request):
@@ -69,20 +73,6 @@ def remove(request,busid):
     data.delete()
     return redirect('get_routes')
 
-# def updatee(request,busid):
-#     # form = Busroutes.objects.all()
-#     if request.method == 'POST':
-#         data = get_object_or_404(Busform,id=busid)
-#         route_no = request.POST.get('route_no',data.route_no)
-#         bus_no = request.POST.get('bus_no',data.bus_no)
-#         live_location_link = request.POST.get('live_location_link',data.live_location_link)
-
-#         route_no =route_no
-#         bus_no = bus_no
-#         live_location_link = live_location_link
-#         data.save()
-#         return redirect('get_routes')
-#     return render(request,'update.html')
 
 def updatee(request, busid):
     
@@ -112,20 +102,128 @@ def addroutes(request):
 
     return render(request,'addroutes.html')
 
+
 def get_areas(request):
-   if request.method == 'POST':
+    if request.method == 'POST':
         routenum = request.POST.get('routenum')
         areas = request.POST.get('areas')
         createe = Addroutes.objects.create(
-
-            routenum = routenum,
-            areas = areas
+            routenum=routenum,
+            areas=areas
         )
-        
         return redirect('get_areas')
-   else:
-       areass = Addroutes.objects.all()
-       return render(request,'getarea.html',{'getting':areass})
+    else:
+        areass = Addroutes.objects.all()
+        query = request.GET.get('search', "")
+
+        if query:
+            filtered_areas = Addroutes.objects.filter(
+                Q(routenum__icontains=query) |
+                Q(areas__icontains=query)
+            )
+        else:
+            filtered_areas = Addroutes.objects.all()
+
+        return render(request, 'getarea.html', {'getting': areass, 'filtered_areas': filtered_areas})
+
+   
+def areas_update(request,areaid):
+    data = get_object_or_404(Addroutes,id=areaid)
+
+    if request.method=='POST':
+        routenum = request.POST.get('routenum',data.routenum)
+        areas = request.POST.get('areas',data.areas)
+
+        data.routenum = routenum
+        data.areas = areas
+        data.save()
+        return redirect('home_areas')
+    return render(request,'reupdatearea.html',{'data':data})
+
+
+def usercred(request):
+    if request.method=='POST':
+        email  = request.POST.get('email')
+        timee = request.POST.get('time')
+        userarea = request.POST.get('userarea')
+
+        createe = Userlocred.objects.create(
+            email = email,
+            userarea = userarea,
+            usertiming = timee
+
+
+        )
+
+        return HttpResponse(request,"the data is saved")
+
+
+
+
+    
+
+    return render(request,'usercred.html')
+
+def plot_areas(request):
+    values = Userlocred.objects.filter(usertiming="08:45").values('userarea').annotate(area_count=Count('id'))
+    data_dict = {item['userarea']:item['area_count'] for item in values}
+    areas = data_dict.keys()
+    counts = data_dict.values()
+
+    fig,ax = plt.subplots()
+    ax.barh(areas,counts,color='skyblue')
+
+    ax.set_xlabel('count of users')
+    ax.set_ylabel('areas')
+    ax.set_title('user count by area')
+    # ax.set_xlim(1, 20)
+
+    buffer = BytesIO()
+    canvas = FigureCanvas(fig)
+    canvas.print_png(buffer)
+
+    return HttpResponse(buffer.getvalue(),content_type='image/png')
+
+def api_areas(request):
+
+
+    return render(request,'apiareas.html')
+
+   
+    
+
+
+
+def display_chart(request):
+    
+    return render(request,'chart.html')
+
+def home_page(request):
+    return render(request,'homepage.html')
+
+def home_areas(request):
+    query = request.GET.get('search',"")
+    if query:
+        filtered_areas = Addroutes.objects.filter(
+            Q(routenum__icontains=query)|
+            Q(areas__icontains=query)
+        )
+    else:
+        filtered_areas = Addroutes.objects.all()
+
+
+    return render(request,'homeareas.html',{'filtered_areas':filtered_areas})
+
+def register_page(request):
+
+    return render(request, 'usercred.html')
+    
+
+
+
+def chatt(request):
+    return render(request,'chatt.html')
+   
        
 
 

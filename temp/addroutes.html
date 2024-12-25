@@ -39,7 +39,6 @@ div {
 <div>
   <form method="post" action="{% url 'get_areas' %}">
     {% csrf_token %}
-    <label for="fname">routeno</label>
     <input type="text" id="fname" name="routenum" placeholder="Your name..">
 
     <label for="lname">Areas</label>

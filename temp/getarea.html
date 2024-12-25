@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -59,8 +65,14 @@
 
 </style>
 <body>
+
   <div class="container">
-      {% for i in getting %}
+    <form method="GET" action="{% url 'get_areas' %}">
+        <input type="text" name="search" placeholder="Search by Route, Bus, or Number Plate" value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+    <a href="{% url 'get_routes' %}" class="w3-button w3-white w3-hover-grey w3-round">view routes on map</a>
+      {% for i in filtered_areas %}
       <div class="card">
           <div class="content">
               <div class="route-details">
@@ -68,7 +80,14 @@
                   <p>Areas: {{ i.areas }}</p>
               </div>
               <div class="price">
-                  <p>$9.99 / route</p> <!-- Placeholder price -->
+                  <!-- <p>$9.99 / route</p> Placeholder price
+                   <form method="post">
+                    <button>delete</button>
+                   </form> -->
+                   <p><a href="{% url 'areas_update' i.id %}">update</P>
+                    <!-- <button>update</button> -->
+
+                   </form>
               </div>
           </div>
       </div>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form with Email, Time, and Area</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Contact Form</h2>
+
+<form id="registerForm">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="time">Preferred Time:</label>
+    <input type="time" id="timing" name="timing" required>
+
+    <label for="area">Area:</label>
+    <input type="text" id="area" name="area" required>
+
+    <button id="sent" type="submit">Submit</button>
+</form>
+<!-- 
+<script>
+    // Initialize WebSocket connection
+    const ws = new WebSocket('ws://127.0.0.1:8000/ws/sc/');
+    
+    ws.onopen = function() {
+        console.log('WebSocket connection opened.');
+    };
+
+    ws.onmessage = function(event) {
+        console.log('Message received from backend:', event.data);
+    };
+
+    ws.onerror = function(error) {
+        console.error('WebSocket error:', error);
+    };
+
+    ws.onclose = function(event) {
+        console.log('WebSocket connection closed. Reason:', event.reason);
+    };
+
+    // Handle form submission
+    document.getElementById('registerForm').onsubmit = function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const mail = document.getElementById('email').value;
+        const time = document.getElementById('timing').value;
+        const area = document.getElementById('area').value;
+
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(JSON.stringify({
+                mail: mail,
+                time: time,
+                area: area
+            }));
+            console.log('Data sent to WebSocket:', { mail, time, area });
+        } else {
+            console.error('WebSocket is not open. Unable to send data.');
+        }
+    };
+</script> -->
+
+
+</body>
+</html>

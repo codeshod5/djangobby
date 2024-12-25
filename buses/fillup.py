@@ -6,5 +6,4 @@ class Busroutes(forms.Form):
     number_plate = forms.CharField(max_length=5)
     live_location_link = forms.URLField(label='Google Maps Live Location Link')
     
-    
-    
+   

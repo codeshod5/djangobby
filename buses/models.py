@@ -11,3 +11,12 @@ class Addroutes(models.Model):
     routenum = models.IntegerField()
     areas = models.TextField()
 
+class Userlocred(models.Model):
+    email = models.EmailField(default=None)
+    userarea = models.TextField()
+    usertiming = models.TimeField()
+
+
+
+
+

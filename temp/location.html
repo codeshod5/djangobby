@@ -1,65 +1,169 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <style>
-            .review-container {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-between;
-            }
-            .review-box {
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
-                margin: 15px;
-                padding: 20px;
-                width: 300px; /* Adjust width as needed */
-                text-align: left;
-                background-color: #f9f9f9;
-            }
-            .review-box img {
-                width: 70%; /* Make the image responsive */
-                border-radius: 8px;
-            }
-            .review-deatails {
-                margin-top: 10px;
-            }
-        </style>
-    </head>
-    <body>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8; /* Light background */
+            color: #333; /* Dark text */
+            margin: 0;
+            padding: 0;
+        }
 
-<h1>Reviews</h1>
+        h1 {
+            text-align: center;
+            color: #2c3e50; /* Deep blue */
+            margin-top: 20px;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        input[type="text"] {
+            width: 50%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-left: 10px;
+            background-color: #3498db; /* Bright blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #2980b9; /* Darker blue */
+        }
+
+        .review-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .review-box {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 20px;
+            text-align: left;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .review-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 4px 6px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .review-deatails p {
+            margin: 10px 0;
+        }
+
+        .review-deatails strong {
+            color: #e74c3c; /* Bright red */
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .delete-link {
+            color: #e74c3c; /* Bright red */
+        }
+
+        .update-link {
+            color: #27ae60; /* Green */
+        }
+    </style>
+</head>
+<body>
+
+<h1>GET LIVE LOCATION</h1>
 <form method="GET" action="{% url 'get_routes' %}">
     <input type="text" name="search" placeholder="Search by Route, Bus, or Number Plate" value="{{ search_query }}">
     <button type="submit">Search</button>
 </form>
+
 <div class="review-container">
-
-{% for review in busform %}
-<div class="review-box">
-    <div class="review-deatails">
-    <p>route number_plate: {{ review.route_no }}</p>
-    <p>bus number: {{ review.bus_no }}</p>  
-    <p>number plate: {{ review.number_plate }}</p>
-    <p><strong>Live Location:</strong>
-        
-                <a href="{{ review.live_location_link }}" target="_blank">View on Google Maps</a>
+    {% for review in busform %}
+    <div class="review-box">
+        <div class="review-deatails">
+            <p>Route Number: {{ review.route_no }}</p>
+            <p>Bus Number: {{ review.bus_no }}</p>
+            <p>Number Plate: {{ review.number_plate }}</p>
+            <p><strong>Live Location:</strong> <a href="{{ review.live_location_link }}" target="_blank">View on Google Maps</a></p>
+            <p>
+                <a href="{% url 'remove' review.id %}" class="delete-link">Delete</a>
+                <span> | </span>
+                <a href="{% url 'updatee' review.id %}" class="update-link">Update</a>
             </p>
-    <p><a href="{% url 'remove' review.id %}" style="margin-right: 10px;">delete
-    <a href="{% url 'updatee' review.id %}">update</P>
-  
-</div>
-</div>
-
-
-{% empty %}
+        </div>
+    </div>
+    {% empty %}
     <p>No reviews available.</p>
-{% endfor %}
+    {% endfor %}
 </div>
-    </body>
-    </html>
 
+<script>
+    const ws = new WebSocket('ws://127.0.0.1:8000/ws/ma/');
 
+    ws.onopen = function () {
+        console.log('WebSocket connection opened.');
+        ws.send('Message sent to server');
+    };
 
+    ws.onmessage = function (event) {
+        console.log('Message received:', event.data);
+        const data = JSON.parse(event.data);
 
+        if (Array.isArray(data.message)) {
+            const container = document.querySelector('.review-container');
+            const revbox = container.querySelectorAll('.review-box');
+            revbox.forEach(reviewbox => reviewbox.remove());
 
+            data.message.forEach(item => {
+                const card = document.createElement('div');
+                card.classList.add('review-box');
+
+                const busdetails = document.createElement('div');
+                busdetails.classList.add('review-deatails');
+                busdetails.innerHTML = `
+                    <p>Route Number: ${item.route_no}</p>
+                    <p>Bus Number: ${item.bus_no}</p>
+                    <p>Number Plate: ${item.number_plate}</p>
+                    <p><strong>Live Location:</strong> <a href="${item.live_location_link}" target="_blank">View on Google Maps</a></p>
+                `;
+                card.appendChild(busdetails);
+                container.appendChild(card);
+            });
+        } else {
+            container.innerHTML = "<p>No reviews available.</p>";
+        }
+    };
+
+    ws.onclose = function () {
+        console.error('WebSocket connection closed.');
+    };
+</script>
+
+</body>
+</html>
