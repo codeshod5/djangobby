@@ -100,7 +100,8 @@ TEMPLATES = [
 # WSGI_APPLICATION = 'djangobby.wsgi.application'
 ASGI_APPLICATION = 'djangobby.asgi.application'
 
-CHANNEL_LAYERS = {
+if ENVIRONMENT == 'development':
+    CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
@@ -108,6 +109,17 @@ CHANNEL_LAYERS = {
         },
     },
 }
+else:
+    CHANNEL_LAYERS = {
+        "default":{
+            "BACKEND": "channels_redis.core.RedisChannelLayer",
+             "CONFIG":{
+                 "hosts":[(env('REDIS_URL'))],
+             }
+        }
+    }
+
+
 
 
 # Database
@@ -124,7 +136,7 @@ else:
     import dj_database_url
     DATABASES = {
         'default':dj_database_url.parse(env('DATABASE_URL'))
-        
+
     }
 
 
