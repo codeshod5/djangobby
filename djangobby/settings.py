@@ -13,8 +13,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from environ import Env
 load_dotenv()
+env = Env()
+Env.read_env()
+ENVIRONMENT = env('ENVIRONMENT',default="production")
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+ENVIRONMENT = "production"
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -22,11 +27,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if ENVIRONMENT =='development':
+    DEBUG = True
+else:
+    DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1']
+
+
+ALLOWED_HOSTS = ['localhost','127.0.0.1','*']
 # AUTH_USER_MODEL = 'userlocred.Customuser'
 AUTH_USER_MODEL = 'accou.CustomUser'
 
@@ -103,12 +113,21 @@ CHANNEL_LAYERS = {
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
+if ENVIRONMENT == 'development':
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+else:
+    import dj_database_url
+    DATABASES = {
+        'default':dj_database_url.parse(env('DATABASE_URL'))
+        
+    }
+
+
 
 
 # Password validation
