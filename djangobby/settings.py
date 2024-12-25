@@ -36,7 +36,9 @@ else:
 
 
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1','*']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','djangobby.onrender.com']
+
+CSRF_TRUSTED_ORIGINS = ['https://djangobby.onrender.com']
 # AUTH_USER_MODEL = 'userlocred.Customuser'
 AUTH_USER_MODEL = 'accou.CustomUser'
 
